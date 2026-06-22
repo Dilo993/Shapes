@@ -150,11 +150,24 @@ function setMode(mode) {
 
 function changeCharacter() {
     const aktualnyZnak = FOLDERY[activeFolderIndex].shapes[activeShapeIndex];
+    const rotationAngle = (aktualnyZnak.rotation || 0) * Math.PI / 180;
+
     currentImg.crossOrigin = "Anonymous";
     currentImg.src = aktualnyZnak.url;
     currentImg.onload = function() {
         bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-        bgCtx.drawImage(currentImg, 40, 40, 320, 320);
+
+        const imgW = 320;
+        const imgH = 320;
+        const centerX = bgCanvas.width / 2;
+        const centerY = bgCanvas.height / 2;
+
+        bgCtx.save();
+        bgCtx.translate(centerX, centerY);
+        bgCtx.rotate(rotationAngle);
+        bgCtx.drawImage(currentImg, -imgW / 2, -imgH / 2, imgW, imgH);
+        bgCtx.restore();
+
         clearCanvas();
     };
 }
