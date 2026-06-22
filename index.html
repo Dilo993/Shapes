@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprawdzian Rysowania Znaków</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Jak dokładnie potrafisz rysować?</h1>
+
+    <div class="controls">
+        <label for="characterSelect" class="label-wheat">Znak:</label>
+        <select id="characterSelect"></select>
+        
+        <button id="btnWithTemplate" class="mode-btn active">Z podglądem</button>
+        <button id="btnWithoutTemplate" class="mode-btn">Z pamięci</button>
+        <button id="btnClear" style="background-color: #dc3545;">Wyczyść</button>
+        <button id="btnCheck" style="background-color: #28a745;">Sprawdź wynik</button>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="bgCanvas" width="400" height="400"></canvas>
+        <canvas id="drawCanvas" width="400" height="400"></canvas>
+        <button id="startOverlayBtn">START (6s)</button>
+    </div>
+
+    <div id="result">Wybierz opcje i kliknij START, aby zacząć!</div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

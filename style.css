@@ -1,0 +1,102 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #3a3a3a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 0;
+}
+
+h1 { 
+    color: wheat; 
+}
+
+.controls {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button, select {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    transition: background 0.2s;
+}
+
+button:hover { 
+    background-color: #0056b3; 
+}
+
+.mode-btn.active { 
+    background-color: #28a745; 
+}
+
+.canvas-container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    border: 2px solid #222;
+    background-color: #4a4a4a;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: crosshair;
+}
+
+#bgCanvas { 
+    z-index: 1; 
+    opacity: 0.4; 
+}
+
+#drawCanvas { 
+    z-index: 2; 
+}
+
+#startOverlayBtn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    padding: 15px 30px;
+    font-size: 20px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+#startOverlayBtn:hover {
+    background-color: #218838;
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: wheat;
+    min-height: 36px;
+}
+
+.label-wheat {
+    align-self: center; 
+    font-weight: bold;
+    color: wheat;
+}
