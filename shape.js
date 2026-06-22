@@ -3,17 +3,23 @@
 // ==========================================
 export const FOLDERY = [
     {
-        categoryName: "Podstawowe kształty",
+        categoryName: "Podstawowe",
         shapes: [
-            { name: "Koło", url: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Circle_-_black_simple.svg" },
-            { name: "Kwadrat", url: "https://upload.wikimedia.org/wikipedia/commons/d/de/Square_black.svg" },
-            { name: "Trójkąt", url: "https://upload.wikimedia.org/wikipedia/commons/e/ec/Regular_triangle.svg" }
+            { name: "Koło", url: "Znaki/Koło.png" },
+            { name: "Kwadrat", url: "Znaki/Kwadrat.png" },
+            { name: "Trójkąt", url: "Znaki/Trójkąt.png" },
+            { name: "Serce", url: "Znaki/Serce.png" },
+            { name: "Heksagram", url: "Znaki/Hexkagram.png" },
+            { name: "Pentagram", url: "Znaki/Pentagram.png" }
         ]
     },
     {
-        categoryName: "Inne",
+        categoryName: "Alchemia-Podstawowa",
         shapes: [
-            { name: "Serce", url: "https://upload.wikimedia.org/wikipedia/commons/4/42/Love_Heart_SVG.svg" }
+            { name: "Fire", url: "Znaki/Trójkąt.png" },
+            { name: "Water", url: "Znaki/Trójkąt.png" , rotation: 180},
+            { name: "Air", url: "Znaki/Air.png" },
+            { name: "Earth", url: "Znaki/Air.png", rotation: 180 }
         ]
     }
 ];

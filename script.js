@@ -116,6 +116,11 @@ function startTimer() {
             clearInterval(timerInterval);
             drawingManager.canDraw = false;
             drawingManager.stop();
+            
+            if (!showTemplate) {
+                bgCanvas.style.display = 'block';
+            }
+
             resultDiv.innerHTML = "Koniec czasu! Sprawdzam...";
             setTimeout(checkAccuracy, 500);
         }
