@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shapes</title>
+    <title>Sprawdzian Rysowania Znaków</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Shapes</h1>
+    <h1>Jak dokładnie potrafisz rysować?</h1>
 
     <div class="controls">
-        <label for="characterSelect" class="label-wheat">Znak:</label>
-        <select id="characterSelect"></select>
+        <button id="btnSelectShape" style="background-color: #6c757d;">Wybierz znak</button>
         
         <button id="btnWithTemplate" class="mode-btn active">Z podglądem</button>
         <button id="btnWithoutTemplate" class="mode-btn">Z pamięci</button>
@@ -24,6 +23,16 @@
         <canvas id="bgCanvas" width="400" height="400"></canvas>
         <canvas id="drawCanvas" width="400" height="400"></canvas>
         <button id="startOverlayBtn">START (6s)</button>
+    </div>
+
+    <div id="result">Wybierz opcje i kliknij START, aby zacząć!</div>
+
+    <div id="shapeModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Wybierz kształt do narysowania</h2>
+            <div id="modalGrid" class="modal-grid"></div>
+        </div>
     </div>
 
     <script type="module" src="script.js"></script>

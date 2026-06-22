@@ -5,9 +5,13 @@ import { calculateAccuracy } from './accuracy.js';
 const drawCanvas = document.getElementById('drawCanvas');
 const bgCanvas = document.getElementById('bgCanvas');
 const bgCtx = bgCanvas.getContext('2d');
-const select = document.getElementById('characterSelect');
 const startBtn = document.getElementById('startOverlayBtn');
 const resultDiv = document.getElementById('result');
+
+const modal = document.getElementById('shapeModal');
+const btnSelectShape = document.getElementById('btnSelectShape');
+const modalClose = document.querySelector('.modal-close');
+const modalGrid = document.getElementById('modalGrid');
 
 const drawingManager = new DrawingManager(drawCanvas);
 
@@ -15,15 +19,37 @@ let showTemplate = true;
 let currentImg = new Image();
 let timeLeft = 6;
 let timerInterval = null;
+let activeShapeIndex = 0;
 
 ZNAKI.forEach((znak, index) => {
-    let opt = document.createElement('option');
-    opt.value = index;
-    opt.innerHTML = znak.name;
-    select.appendChild(opt);
+    const card = document.createElement('div');
+    card.className = 'shape-card';
+    card.innerHTML = `
+        <img src="${znak.url}" alt="${znak.name}">
+        <span>${znak.name}</span>
+    `;
+    card.addEventListener('click', () => {
+        activeShapeIndex = index;
+        changeCharacter();
+        modal.style.display = 'none';
+    });
+    modalGrid.appendChild(card);
 });
 
-select.addEventListener('change', changeCharacter);
+btnSelectShape.addEventListener('click', () => {
+    modal.style.display = 'block';
+});
+
+modalClose.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
 document.getElementById('btnWithTemplate').addEventListener('click', () => setMode(true));
 document.getElementById('btnWithoutTemplate').addEventListener('click', () => setMode(false));
 document.getElementById('btnClear').addEventListener('click', clearCanvas);
@@ -75,28 +101,13 @@ function setMode(mode) {
 }
 
 function changeCharacter() {
-    const index = select.value;
     currentImg.crossOrigin = "Anonymous";
-    currentImg.src = ZNAKI[index].url;
+    currentImg.src = ZNAKI[activeShapeIndex].url;
     currentImg.onload = function() {
         bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
         bgCtx.drawImage(currentImg, 40, 40, 320, 320);
         clearCanvas();
     };
-}
-
-function checkAccuracy() {
-    clearInterval(timerInterval);
-    drawingManager.canDraw = false;
-    startBtn.style.display = 'block';
-
-    const score = calculateAccuracy(bgCtx, drawingManager.ctx, bgCanvas.width, bgCanvas.height);
-    
-    if (score === 0 && drawingManager.isDrawing === false) {
-        resultDiv.innerHTML = `Wynik: 0% (Nic nie narysowano)`;
-    } else {
-        resultDiv.innerHTML = `Wynik: ${score.toFixed(0)}%`;
-    }
 }
 
 changeCharacter();
