@@ -9,7 +9,7 @@ export const FOLDERY = [
             { name: "Kwadrat", url: "Znaki/Kwadrat.png" },
             { name: "Trójkąt", url: "Znaki/Trójkąt.png" },
             { name: "Serce", url: "Znaki/Serce.png" },
-            { name: "Heksagram", url: "Znaki/Hexkagram.png" },
+            { name: "Heksagram", url: "Znaki/Heksagram.png" },
             { name: "Pentagram", url: "Znaki/Pentagram.png" }
         ]
     },
