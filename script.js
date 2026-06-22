@@ -1,15 +1,17 @@
-import { ZNAKI } from './shape.js';
+import { FOLDERY } from './shape.js';
 import { DrawingManager } from './drawing.js';
 import { calculateAccuracy } from './accuracy.js';
 
 let drawCanvas, bgCanvas, bgCtx, startBtn, resultDiv;
-let modal, btnSelectShape, modalClose, modalGrid;
+let modal, btnSelectShape, modalClose, modalGrid, btnBackToFolders, modalTitle;
 let drawingManager;
 
 let showTemplate = true;
 let currentImg = new Image();
 let timeLeft = 6;
 let timerInterval = null;
+
+let activeFolderIndex = 0;
 let activeShapeIndex = 0;
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -23,25 +25,17 @@ window.addEventListener('DOMContentLoaded', () => {
     btnSelectShape = document.getElementById('btnSelectShape');
     modalClose = document.querySelector('.modal-close');
     modalGrid = document.getElementById('modalGrid');
+    btnBackToFolders = document.getElementById('btnBackToFolders');
+    modalTitle = document.getElementById('modalTitle');
 
     drawingManager = new DrawingManager(drawCanvas);
 
-    ZNAKI.forEach((znak, index) => {
-        const card = document.createElement('div');
-        card.className = 'shape-card';
-        card.innerHTML = `
-            <img src="${znak.url}" alt="${znak.name}">
-            <span>${znak.name}</span>
-        `;
-        card.addEventListener('click', () => {
-            activeShapeIndex = index;
-            changeCharacter();
-            modal.style.display = 'none';
-        });
-        modalGrid.appendChild(card);
-    });
+    renderFolders();
+
+    btnBackToFolders.addEventListener('click', renderFolders);
 
     btnSelectShape.addEventListener('click', () => {
+        renderFolders();
         modal.style.display = 'block';
     });
 
@@ -63,6 +57,47 @@ window.addEventListener('DOMContentLoaded', () => {
 
     changeCharacter();
 });
+
+function renderFolders() {
+    modalGrid.innerHTML = '';
+    btnBackToFolders.style.display = 'none';
+    modalTitle.innerHTML = 'Wybierz kategorię';
+
+    FOLDERY.forEach((folder, folderIdx) => {
+        const card = document.createElement('div');
+        card.className = 'shape-card folder-card';
+        card.innerHTML = `
+            <span style="font-size: 40px; color: #ffc107;">📁</span>
+            <span>${folder.categoryName}</span>
+        `;
+        card.addEventListener('click', () => {
+            renderShapes(folderIdx);
+        });
+        modalGrid.appendChild(card);
+    });
+}
+
+function renderShapes(folderIdx) {
+    modalGrid.innerHTML = '';
+    btnBackToFolders.style.display = 'block';
+    modalTitle.innerHTML = FOLDERY[folderIdx].categoryName;
+
+    FOLDERY[folderIdx].shapes.forEach((znak, shapeIdx) => {
+        const card = document.createElement('div');
+        card.className = 'shape-card';
+        card.innerHTML = `
+            <img src="${znak.url}" alt="${znak.name}">
+            <span>${znak.name}</span>
+        `;
+        card.addEventListener('click', () => {
+            activeFolderIndex = folderIdx;
+            activeShapeIndex = shapeIdx;
+            changeCharacter();
+            modal.style.display = 'none';
+        });
+        modalGrid.appendChild(card);
+    });
+}
 
 function startTimer() {
     startBtn.style.display = 'none';
@@ -109,8 +144,9 @@ function setMode(mode) {
 }
 
 function changeCharacter() {
+    const aktualnyZnak = FOLDERY[activeFolderIndex].shapes[activeShapeIndex];
     currentImg.crossOrigin = "Anonymous";
-    currentImg.src = ZNAKI[activeShapeIndex].url;
+    currentImg.src = aktualnyZnak.url;
     currentImg.onload = function() {
         bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
         bgCtx.drawImage(currentImg, 40, 40, 320, 320);
