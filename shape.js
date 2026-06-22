@@ -1,6 +1,3 @@
-// ==========================================
-// MIEJSCE NA TWOJE ZNAKI (ŁATWE DODAWANIE)
-// ==========================================
 export const ZNAKI = [
     { name: "Koło", url: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Circle_-_black_simple.svg" },
     { name: "Kwadrat", url: "https://upload.wikimedia.org/wikipedia/commons/d/de/Square_black.svg" },
