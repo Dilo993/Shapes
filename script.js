@@ -89,6 +89,13 @@ function renderShapes(folderIdx) {
             <img src="${znak.url}" alt="${znak.name}">
             <span>${znak.name}</span>
         `;
+        
+        const kat = znak.rotation || 0;
+        if (kat !== 0) {
+            const imgElement = card.querySelector('img');
+            imgElement.style.transform = `rotate(${kat}deg)`;
+        }
+
         card.addEventListener('click', () => {
             activeFolderIndex = folderIdx;
             activeShapeIndex = shapeIdx;
