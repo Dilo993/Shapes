@@ -2,18 +2,9 @@ import { ZNAKI } from './shape.js';
 import { DrawingManager } from './drawing.js';
 import { calculateAccuracy } from './accuracy.js';
 
-const drawCanvas = document.getElementById('drawCanvas');
-const bgCanvas = document.getElementById('bgCanvas');
-const bgCtx = bgCanvas.getContext('2d');
-const startBtn = document.getElementById('startOverlayBtn');
-const resultDiv = document.getElementById('result');
-
-const modal = document.getElementById('shapeModal');
-const btnSelectShape = document.getElementById('btnSelectShape');
-const modalClose = document.querySelector('.modal-close');
-const modalGrid = document.getElementById('modalGrid');
-
-const drawingManager = new DrawingManager(drawCanvas);
+let drawCanvas, bgCanvas, bgCtx, startBtn, resultDiv;
+let modal, btnSelectShape, modalClose, modalGrid;
+let drawingManager;
 
 let showTemplate = true;
 let currentImg = new Image();
@@ -21,40 +12,57 @@ let timeLeft = 6;
 let timerInterval = null;
 let activeShapeIndex = 0;
 
-ZNAKI.forEach((znak, index) => {
-    const card = document.createElement('div');
-    card.className = 'shape-card';
-    card.innerHTML = `
-        <img src="${znak.url}" alt="${znak.name}">
-        <span>${znak.name}</span>
-    `;
-    card.addEventListener('click', () => {
-        activeShapeIndex = index;
-        changeCharacter();
+window.addEventListener('DOMContentLoaded', () => {
+    drawCanvas = document.getElementById('drawCanvas');
+    bgCanvas = document.getElementById('bgCanvas');
+    bgCtx = bgCanvas.getContext('2d');
+    startBtn = document.getElementById('startOverlayBtn');
+    resultDiv = document.getElementById('result');
+
+    modal = document.getElementById('shapeModal');
+    btnSelectShape = document.getElementById('btnSelectShape');
+    modalClose = document.querySelector('.modal-close');
+    modalGrid = document.getElementById('modalGrid');
+
+    drawingManager = new DrawingManager(drawCanvas);
+
+    ZNAKI.forEach((znak, index) => {
+        const card = document.createElement('div');
+        card.className = 'shape-card';
+        card.innerHTML = `
+            <img src="${znak.url}" alt="${znak.name}">
+            <span>${znak.name}</span>
+        `;
+        card.addEventListener('click', () => {
+            activeShapeIndex = index;
+            changeCharacter();
+            modal.style.display = 'none';
+        });
+        modalGrid.appendChild(card);
+    });
+
+    btnSelectShape.addEventListener('click', () => {
+        modal.style.display = 'block';
+    });
+
+    modalClose.addEventListener('click', () => {
         modal.style.display = 'none';
     });
-    modalGrid.appendChild(card);
-});
 
-btnSelectShape.addEventListener('click', () => {
-    modal.style.display = 'block';
-});
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
 
-modalClose.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
+    document.getElementById('btnWithTemplate').addEventListener('click', () => setMode(true));
+    document.getElementById('btnWithoutTemplate').addEventListener('click', () => setMode(false));
+    document.getElementById('btnClear').addEventListener('click', clearCanvas);
+    document.getElementById('btnCheck').addEventListener('click', checkAccuracy);
+    startBtn.addEventListener('click', startTimer);
 
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        modal.style.display = 'none';
-    }
+    changeCharacter();
 });
-
-document.getElementById('btnWithTemplate').addEventListener('click', () => setMode(true));
-document.getElementById('btnWithoutTemplate').addEventListener('click', () => setMode(false));
-document.getElementById('btnClear').addEventListener('click', clearCanvas);
-document.getElementById('btnCheck').addEventListener('click', checkAccuracy);
-startBtn.addEventListener('click', startTimer);
 
 function startTimer() {
     startBtn.style.display = 'none';
@@ -110,4 +118,16 @@ function changeCharacter() {
     };
 }
 
-changeCharacter();
+function checkAccuracy() {
+    clearInterval(timerInterval);
+    drawingManager.canDraw = false;
+    startBtn.style.display = 'block';
+
+    const score = calculateAccuracy(bgCtx, drawingManager.ctx, bgCanvas.width, bgCanvas.height);
+    
+    if (score === 0 && drawingManager.isDrawing === false) {
+        resultDiv.innerHTML = `Wynik: 0% (Nic nie narysowano)`;
+    } else {
+        resultDiv.innerHTML = `Wynik: ${score.toFixed(0)}%`;
+    }
+}
