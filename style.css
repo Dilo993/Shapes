@@ -23,20 +23,34 @@ h1 {
 button, select {
     padding: 10px 15px;
     font-size: 16px;
-    border: none;
+    border: 1px solid #555;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    transition: background 0.2s;
+    background-color: #4f4f4f; /* Matowy, ciemny szary */
+    color: wheat; /* Tekst dopasowany do reszty napisów */
+    transition: background 0.2s, border-color 0.2s;
 }
-
 button:hover { 
-    background-color: #0056b3; 
+    background-color: #5a5a5a; 
+    border-color: #777;
 }
-
 .mode-btn.active { 
-    background-color: #28a745; 
+    background-color: #3b6e4c; 
+    color: #e0e0e0;
+    border-color: #4c8a5f;
+}
+#btnBackToFolders {
+    background-color: #555;
+    color: wheat;
+    padding: 8px 15px;
+    border: 1px solid #666;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+#btnBackToFolders:hover {
+    background-color: #626262;
 }
 
 .canvas-container {
@@ -94,14 +108,11 @@ canvas {
     color: wheat;
     min-height: 36px;
 }
-
 .label-wheat {
     align-self: center; 
     font-weight: bold;
     color: wheat;
 }
-
-/* Styl dla tła modalu (zaciemnienie strony) */
 .modal {
     display: none; 
     position: fixed; 
@@ -112,8 +123,6 @@ canvas {
     height: 100%; 
     background-color: rgba(0,0,0,0.7); 
 }
-
-/* Okienko na środku */
 .modal-content {
     background-color: #4a4a4a;
     margin: 10% auto; 
@@ -126,8 +135,6 @@ canvas {
     text-align: center;
     box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
-
-/* Przycisk zamknięcia (X) */
 .modal-close {
     color: #aaa;
     float: right;
