@@ -183,3 +183,24 @@ canvas {
     color: wheat;
     font-weight: bold;
 }
+.category-card {
+    background-color: #3a3a3a;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+.category-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #ffc107;
+    font-size: 18px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+}
+.category-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

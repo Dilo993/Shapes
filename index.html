@@ -26,11 +26,10 @@
     <div id="result">Wybierz opcje i kliknij START, aby zacząć!</div>
 
     <div id="shapeModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2 id="modalTitle">Wybierz kategorię</h2>
-            <button id="btnBackToFolders" style="display: none;">&larr; Wróć do folderów</button>
-            <div id="modalGrid" class="modal-grid"></div>
+        <div class="modal-content" style="max-width: 600px;"> <span class="modal-close">&times;</span>
+            <h2>Wybierz znaki do nałożenia</h2>
+            <div id="modalCategoriesContainer" style="margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 5px;"></div>
+            <button id="btnApplyShapes" style="background-color: #3b6e4c; margin-top: 15px; width: 100%;">Zatwierdź wybór</button>
         </div>
     </div>
 

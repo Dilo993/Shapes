@@ -3,16 +3,14 @@ import { DrawingManager } from './drawing.js';
 import { calculateAccuracy } from './accuracy.js';
 
 let drawCanvas, bgCanvas, bgCtx, startBtn, resultDiv;
-let modal, btnSelectShape, modalClose, modalGrid, btnBackToFolders, modalTitle;
+let modal, btnSelectShape, modalClose, modalCategoriesContainer, btnApplyShapes;
 let drawingManager;
 
 let showTemplate = true;
-let currentImg = new Image();
 let timeLeft = 6;
 let timerInterval = null;
 
-let activeFolderIndex = 0;
-let activeShapeIndex = 0;
+let wybraneZnaki = [{ fIdx: 0, sIdx: 0 }];
 
 window.addEventListener('DOMContentLoaded', () => {
     drawCanvas = document.getElementById('drawCanvas');
@@ -24,18 +22,62 @@ window.addEventListener('DOMContentLoaded', () => {
     modal = document.getElementById('shapeModal');
     btnSelectShape = document.getElementById('btnSelectShape');
     modalClose = document.querySelector('.modal-close');
-    modalGrid = document.getElementById('modalGrid');
-    btnBackToFolders = document.getElementById('btnBackToFolders');
-    modalTitle = document.getElementById('modalTitle');
+    modalCategoriesContainer = document.getElementById('modalCategoriesContainer');
+    btnApplyShapes = document.getElementById('btnApplyShapes');
 
     drawingManager = new DrawingManager(drawCanvas);
 
-    renderFolders();
+    FOLDERY.forEach((folder, folderIdx) => {
+        const categoryCard = document.createElement('div');
+        categoryCard.className = 'category-card';
+        
+        categoryCard.innerHTML = `
+            <h3>📁 ${folder.categoryName}</h3>
+            <div class="category-options"></div>
+        `;
+        
+        const optionsContainer = categoryCard.querySelector('.category-options');
 
-    btnBackToFolders.addEventListener('click', renderFolders);
+        folder.shapes.forEach((znak, shapeIdx) => {
+            const label = document.createElement('label');
+            label.style.cursor = 'pointer';
+            label.style.fontSize = '16px';
+            label.style.display = 'block';
+
+            const infoObrót = znak.rotation ? ` (${znak.rotation}°)` : '';
+            
+            const isChecked = wybraneZnaki.some(z => z.fIdx === folderIdx && z.sIdx === shapeIdx);
+
+            label.innerHTML = `
+                <input type="checkbox" value="${folderIdx}-${shapeIdx}" ${isChecked ? 'checked' : ''} style="margin-right: 10px; transform: scale(1.1);">
+                ${znak.name}${infoObrót}
+            `;
+            optionsContainer.appendChild(label);
+        });
+
+        modalCategoriesContainer.appendChild(categoryCard);
+    });
+    btnApplyShapes.addEventListener('click', () => {
+        const checkboxes = modalCategoriesContainer.querySelectorAll('input[type="checkbox"]');
+        wybraneZnaki = [];
+
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                const [fIdx, sIdx] = cb.value.split('-').map(Number);
+                wybraneZnaki.push({ fIdx, sIdx });
+            }
+        });
+
+        if (wybraneZnaki.length === 0) {
+            alert("Musisz zaznaczyć przynajmniej jeden kształt!");
+            return;
+        }
+
+        changeCharacter();
+        modal.style.display = 'none';
+    });
 
     btnSelectShape.addEventListener('click', () => {
-        renderFolders();
         modal.style.display = 'block';
     });
 
@@ -57,54 +99,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     changeCharacter();
 });
-
-function renderFolders() {
-    modalGrid.innerHTML = '';
-    btnBackToFolders.style.display = 'none';
-    modalTitle.innerHTML = 'Wybierz kategorię';
-
-    FOLDERY.forEach((folder, folderIdx) => {
-        const card = document.createElement('div');
-        card.className = 'shape-card folder-card';
-        card.innerHTML = `
-            <span style="font-size: 40px; color: #ffc107;">📁</span>
-            <span>${folder.categoryName}</span>
-        `;
-        card.addEventListener('click', () => {
-            renderShapes(folderIdx);
-        });
-        modalGrid.appendChild(card);
-    });
-}
-
-function renderShapes(folderIdx) {
-    modalGrid.innerHTML = '';
-    btnBackToFolders.style.display = 'block';
-    modalTitle.innerHTML = FOLDERY[folderIdx].categoryName;
-
-    FOLDERY[folderIdx].shapes.forEach((znak, shapeIdx) => {
-        const card = document.createElement('div');
-        card.className = 'shape-card';
-        card.innerHTML = `
-            <img src="${znak.url}" alt="${znak.name}">
-            <span>${znak.name}</span>
-        `;
-        
-        const kat = znak.rotation || 0;
-        if (kat !== 0) {
-            const imgElement = card.querySelector('img');
-            imgElement.style.transform = `rotate(${kat}deg)`;
-        }
-
-        card.addEventListener('click', () => {
-            activeFolderIndex = folderIdx;
-            activeShapeIndex = shapeIdx;
-            changeCharacter();
-            modal.style.display = 'none';
-        });
-        modalGrid.appendChild(card);
-    });
-}
 
 function startTimer() {
     startBtn.style.display = 'none';
@@ -156,27 +150,34 @@ function setMode(mode) {
 }
 
 function changeCharacter() {
-    const aktualnyZnak = FOLDERY[activeFolderIndex].shapes[activeShapeIndex];
-    const rotationAngle = (aktualnyZnak.rotation || 0) * Math.PI / 180;
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    let loadedCount = 0;
 
-    currentImg.crossOrigin = "Anonymous";
-    currentImg.src = aktualnyZnak.url;
-    currentImg.onload = function() {
-        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    wybraneZnaki.forEach(pozycja => {
+        const znak = FOLDERY[pozycja.fIdx].shapes[pozycja.sIdx];
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.src = znak.url;
 
-        const imgW = 320;
-        const imgH = 320;
-        const centerX = bgCanvas.width / 2;
-        const centerY = bgCanvas.height / 2;
+        img.onload = function() {
+            bgCtx.save();
+            
+            const kat = znak.rotation || 0;
+            if (kat !== 0) {
+                bgCtx.translate(bgCanvas.width / 2, bgCanvas.height / 2);
+                bgCtx.rotate((kat * Math.PI) / 180);
+                bgCtx.translate(-bgCanvas.width / 2, -bgCanvas.height / 2);
+            }
 
-        bgCtx.save();
-        bgCtx.translate(centerX, centerY);
-        bgCtx.rotate(rotationAngle);
-        bgCtx.drawImage(currentImg, -imgW / 2, -imgH / 2, imgW, imgH);
-        bgCtx.restore();
+            bgCtx.drawImage(img, 40, 40, 320, 320);
+            bgCtx.restore();
 
-        clearCanvas();
-    };
+            loadedCount++;
+            if (loadedCount === wybraneZnaki.length) {
+                clearCanvas();
+            }
+        };
+    });
 }
 
 function checkAccuracy() {
