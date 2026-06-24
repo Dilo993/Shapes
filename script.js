@@ -162,21 +162,25 @@ function setMode(mode) {
 function changeCharacter() {
     bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
     let loadedCount = 0;
-
+    
     const unikalneFoldery = new Set(wybraneZnaki.map(pozycja => pozycja.fIdx));
-    
     const czyMiksFolderow = unikalneFoldery.size > 1;
-    
-    const czyTenSamFolderIMultiple = unikalneFoldery.size === 1 && wybraneZnaki.length > 1;
+
+    const iloscWFolderze = {};
+    wybraneZnaki.forEach(p => {
+        iloscWFolderze[p.fIdx] = (iloscWFolderze[p.fIdx] || 0) + 1;
+    });
 
     const KĄTY = [
-        { x: 10,  y: 10 },   // Lewy górny
-        { x: 134, y: 10 },   // Prawy górny
-        { x: 10,  y: 134 },  // Lewy dolny
-        { x: 134, y: 134 }   // Prawy dolny
+        { x: 10,  y: 10 }, 
+        { x: 134, y: 10 },
+        { x: 10,  y: 134 },
+        { x: 134, y: 134 }
     ];
 
-    wybraneZnaki.forEach((pozycja, index) => {
+    const licznikKątówDlaFolderu = {};
+
+    wybraneZnaki.forEach((pozycja) => {
         const znak = FOLDERY[pozycja.fIdx].shapes[pozycja.sIdx];
         const img = new Image();
         img.crossOrigin = "Anonymous";
@@ -190,19 +194,37 @@ function changeCharacter() {
             let marginesX = 40;
             let marginesY = 40;
 
-            if (czyMiksFolderow && pozycja.fIdx === 0) {
-                szerokosc = 320 * 1.5;  // 480px
-                wysokosc = 320 * 1.5;  // 480px
-                marginesX = (bgCanvas.width - szerokosc) / 2;
-                marginesY = (bgCanvas.height - wysokosc) / 2;
-            }
-            else if (czyTenSamFolderIMultiple) {
-                szerokosc = 320 * 0.8;  // 256px
-                wysokosc = 320 * 0.8;  // 256px
+            const czyWieleZtegoSamegoFolderu = iloscWFolderze[pozycja.fIdx] > 1;
+
+            if (czyWieleZtegoSamegoFolderu) {
+                szerokosc = 320 * 0.6;
+                wysokosc = 320 * 0.6;
                 
-                const katIndex = index % 4; 
+                if (licznikKątówDlaFolderu[pozycja.fIdx] === undefined) {
+                    licznikKątówDlaFolderu[pozycja.fIdx] = 0;
+                }
+                const katIndex = licznikKątówDlaFolderu[pozycja.fIdx] % 4;
+                
                 marginesX = KĄTY[katIndex].x;
                 marginesY = KĄTY[katIndex].y;
+                
+                licznikKątówDlaFolderu[pozycja.fIdx]++;
+            }
+
+            if (czyMiksFolderow && pozycja.fIdx === 0) {
+                const staraSzerokosc = szerokosc;
+                const staraWysokosc = wysokosc;
+
+                szerokosc = szerokosc * 1.5;
+                wysokosc = wysokosc * 1.5;
+
+                if (!czyWieleZtegoSamegoFolderu) {
+                    marginesX = (bgCanvas.width - szerokosc) / 2;
+                    marginesY = (bgCanvas.height - wysokosc) / 2;
+                } else {
+                    marginesX -= (szerokosc - staraSzerokosc) / 2;
+                    marginesY -= (wysokosc - staraWysokosc) / 2;
+                }
             }
 
             const kat = znak.rotation || 0;
