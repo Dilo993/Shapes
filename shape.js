@@ -8,6 +8,8 @@ export const FOLDERY = [
             { name: "Koło", url: "Znaki/Koło.png" },
             { name: "Kwadrat", url: "Znaki/Kwadrat.png" },
             { name: "Trójkąt", url: "Znaki/Trójkąt.png" },
+            { name: "Pentagon", url: "Znaki/Pentagon.png" },
+            { name: "Hexagon", url: "Znaki/Hexagon.png" },
             { name: "Serce", url: "Znaki/Serce.png" },
             { name: "Heksagram", url: "Znaki/Heksagram.png" },
             { name: "Pentagram", url: "Znaki/Pentagram.png" }
