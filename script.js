@@ -144,7 +144,7 @@ function clearCanvas() {
     drawingManager.canDraw = true;
     
     bgCanvas.style.display = 'block'; 
-    resultDiv.innerHTML = 'Zacznij rysować po płótnie, aby uruchomić czas (6s)!';
+    resultDiv.innerHTML = 'Zacznij rysować, aby uruchomić czas (6s)!';
 }
 
 function setMode(mode) {
