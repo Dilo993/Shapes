@@ -162,7 +162,7 @@ function setMode(mode) {
 function changeCharacter() {
     bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
     let loadedCount = 0;
-    
+
     const unikalneFoldery = new Set(wybraneZnaki.map(pozycja => pozycja.fIdx));
     const czyMiksFolderow = unikalneFoldery.size > 1;
 
@@ -197,8 +197,8 @@ function changeCharacter() {
             const czyWieleZtegoSamegoFolderu = iloscWFolderze[pozycja.fIdx] > 1;
 
             if (czyWieleZtegoSamegoFolderu) {
-                szerokosc = 320 * 0.6;
-                wysokosc = 320 * 0.6;
+                szerokosc = 320 * 0.8;
+                wysokosc = 320 * 0.8;
                 
                 if (licznikKątówDlaFolderu[pozycja.fIdx] === undefined) {
                     licznikKątówDlaFolderu[pozycja.fIdx] = 0;
