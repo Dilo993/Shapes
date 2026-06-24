@@ -20,8 +20,8 @@ export function calculateAccuracy(bgCtx, drawCtx, width, height) {
         return false;
     }
 
-    for (let y = 0; y < height; y += 2) {
-        for (let x = 0; x < width; x += 2) {
+    for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < width; x += 1) {
             let idx = (y * width + x) * 4;
             
             const tF = imgDataTemplate[idx + 3] > 50;
@@ -30,7 +30,8 @@ export function calculateAccuracy(bgCtx, drawCtx, width, height) {
             if (tF) templatePixels++;
             if (uF) {
                 userPixels++;
-                if (checkTemplateNearby(x, y, 8)) {
+
+                if (checkTemplateNearby(x, y, 3)) {
                     correctMatches++;
                 }
             }
