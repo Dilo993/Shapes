@@ -164,9 +164,16 @@ function changeCharacter() {
     let loadedCount = 0;
 
     const unikalneFoldery = new Set(wybraneZnaki.map(pozycja => pozycja.fIdx));
-    const czyMiksFolderow = unikalneFoldery.size > 1;
+    const czyTenSamFolderIMultiple = unikalneFoldery.size === 1 && wybraneZnaki.length > 1;
 
-    wybraneZnaki.forEach(pozycja => {
+    const KĄTY = [
+        { x: 10,  y: 10 },   // Lewy górny
+        { x: 134, y: 10 },   // Prawy górny
+        { x: 10,  y: 134 },  // Lewy dolny
+        { x: 134, y: 134 }   // Prawy dolny
+    ];
+
+    wybraneZnaki.forEach((pozycja, index) => {
         const znak = FOLDERY[pozycja.fIdx].shapes[pozycja.sIdx];
         const img = new Image();
         img.crossOrigin = "Anonymous";
@@ -180,20 +187,23 @@ function changeCharacter() {
             let marginesX = 40;
             let marginesY = 40;
 
-            if (czyMiksFolderow && pozycja.fIdx === 0) {
-                szerokosc = 320 * 1.5;
-                wysokosc = 320 * 1.5;
+            if (czyTenSamFolderIMultiple) {
+                szerokosc = 320 * 0.8; 
+                wysokosc = 320 * 0.8;
                 
-
-                marginesX = (bgCanvas.width - szerokosc) / 2;
-                marginesY = (bgCanvas.height - wysokosc) / 2;
+                const katIndex = index % 4; 
+                marginesX = KĄTY[katIndex].x;
+                marginesY = KĄTY[katIndex].y;
             }
 
             const kat = znak.rotation || 0;
             if (kat !== 0) {
-                bgCtx.translate(bgCanvas.width / 2, bgCanvas.height / 2);
+                const srodekX = marginesX + szerokosc / 2;
+                const srodekY = marginesY + wysokosc / 2;
+                
+                bgCtx.translate(srodekX, srodekY);
                 bgCtx.rotate((kat * Math.PI) / 180);
-                bgCtx.translate(-bgCanvas.width / 2, -bgCanvas.height / 2);
+                bgCtx.translate(-srodekX, -srodekY);
             }
 
             bgCtx.drawImage(img, marginesX, marginesY, szerokosc, wysokosc);
