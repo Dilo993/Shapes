@@ -164,6 +164,9 @@ function changeCharacter() {
     let loadedCount = 0;
 
     const unikalneFoldery = new Set(wybraneZnaki.map(pozycja => pozycja.fIdx));
+    
+    const czyMiksFolderow = unikalneFoldery.size > 1;
+    
     const czyTenSamFolderIMultiple = unikalneFoldery.size === 1 && wybraneZnaki.length > 1;
 
     const KĄTY = [
@@ -187,9 +190,15 @@ function changeCharacter() {
             let marginesX = 40;
             let marginesY = 40;
 
-            if (czyTenSamFolderIMultiple) {
-                szerokosc = 320 * 0.8; 
-                wysokosc = 320 * 0.8;
+            if (czyMiksFolderow && pozycja.fIdx === 0) {
+                szerokosc = 320 * 1.5;  // 480px
+                wysokosc = 320 * 1.5;  // 480px
+                marginesX = (bgCanvas.width - szerokosc) / 2;
+                marginesY = (bgCanvas.height - wysokosc) / 2;
+            }
+            else if (czyTenSamFolderIMultiple) {
+                szerokosc = 320 * 0.8;  // 256px
+                wysokosc = 320 * 0.8;  // 256px
                 
                 const katIndex = index % 4; 
                 marginesX = KĄTY[katIndex].x;
