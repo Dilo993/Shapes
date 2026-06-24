@@ -2,7 +2,7 @@ import { FOLDERY } from './shape.js';
 import { DrawingManager } from './drawing.js';
 import { calculateAccuracy } from './accuracy.js';
 
-let drawCanvas, bgCanvas, bgCtx, startBtn, resultDiv;
+let drawCanvas, bgCanvas, bgCtx, resultDiv;
 let modal, btnSelectShape, modalClose, modalCategoriesContainer, btnApplyShapes;
 let drawingManager;
 
@@ -10,13 +10,14 @@ let showTemplate = true;
 let timeLeft = 6;
 let timerInterval = null;
 
+let gameStarted = false;
+
 let wybraneZnaki = [{ fIdx: 0, sIdx: 0 }];
 
 window.addEventListener('DOMContentLoaded', () => {
     drawCanvas = document.getElementById('drawCanvas');
     bgCanvas = document.getElementById('bgCanvas');
     bgCtx = bgCanvas.getContext('2d');
-    startBtn = document.getElementById('startOverlayBtn');
     resultDiv = document.getElementById('result');
 
     modal = document.getElementById('shapeModal');
@@ -26,11 +27,11 @@ window.addEventListener('DOMContentLoaded', () => {
     btnApplyShapes = document.getElementById('btnApplyShapes');
 
     drawingManager = new DrawingManager(drawCanvas);
+    drawingManager.canDraw = true;
 
     FOLDERY.forEach((folder, folderIdx) => {
         const categoryCard = document.createElement('div');
         categoryCard.className = 'category-card';
-        
         categoryCard.innerHTML = `
             <h3>📁 ${folder.categoryName}</h3>
             <div class="category-options"></div>
@@ -48,13 +49,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
             label.innerHTML = `
                 <input type="checkbox" value="${folderIdx}-${shapeIdx}" ${isChecked ? 'checked' : ''} style="margin-right: 10px; transform: scale(1.1);">
-                ${znak.name}${infoObrót}
+                ${znak.name}
             `;
             optionsContainer.appendChild(label);
         });
 
         modalCategoriesContainer.appendChild(categoryCard);
     });
+
     btnApplyShapes.addEventListener('click', () => {
         const checkboxes = modalCategoriesContainer.querySelectorAll('input[type="checkbox"]');
         wybraneZnaki = [];
@@ -93,19 +95,29 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnWithoutTemplate').addEventListener('click', () => setMode(false));
     document.getElementById('btnClear').addEventListener('click', clearCanvas);
     document.getElementById('btnCheck').addEventListener('click', checkAccuracy);
-    startBtn.addEventListener('click', startTimer);
+    
+    drawCanvas.addEventListener('mousedown', handleFirstStroke);
+    drawCanvas.addEventListener('touchstart', handleFirstStroke);
 
     changeCharacter();
 });
 
+function handleFirstStroke() {
+    if (!gameStarted) {
+        gameStarted = true;
+        startTimer();
+    }
+}
+
 function startTimer() {
-    startBtn.style.display = 'none';
-    drawingManager.clear();
-    
     clearInterval(timerInterval);
     timeLeft = 6;
     drawingManager.canDraw = true;
     resultDiv.innerHTML = `Pozostały czas: ${timeLeft}s`;
+
+    if (!showTemplate) {
+        bgCanvas.style.display = 'none';
+    }
 
     timerInterval = setInterval(() => {
         timeLeft--;
@@ -116,9 +128,7 @@ function startTimer() {
             drawingManager.canDraw = false;
             drawingManager.stop();
             
-            if (!showTemplate) {
-                bgCanvas.style.display = 'block';
-            }
+            bgCanvas.style.display = 'block';
 
             resultDiv.innerHTML = "Koniec czasu! Sprawdzam...";
             setTimeout(checkAccuracy, 500);
@@ -126,24 +136,21 @@ function startTimer() {
     }, 1000);
 }
 
-function resetGameUI() {
-    clearInterval(timerInterval);
-    drawingManager.canDraw = false;
-    drawingManager.stop();
-    startBtn.style.display = 'block';
-}
-
 function clearCanvas() {
+    clearInterval(timerInterval);
     drawingManager.clear();
-    resultDiv.innerHTML = 'Kliknij START, aby spróbować ponownie!';
-    resetGameUI();
+    
+    gameStarted = false; 
+    drawingManager.canDraw = true;
+    
+    bgCanvas.style.display = 'block'; 
+    resultDiv.innerHTML = 'Zacznij rysować po płótnie, aby uruchomić czas (6s)!';
 }
 
 function setMode(mode) {
     showTemplate = mode;
     document.getElementById('btnWithTemplate').classList.toggle('active', mode);
     document.getElementById('btnWithoutTemplate').classList.toggle('active', !mode);
-    bgCanvas.style.display = mode ? 'block' : 'none';
     clearCanvas();
 }
 
@@ -181,7 +188,6 @@ function changeCharacter() {
 function checkAccuracy() {
     clearInterval(timerInterval);
     drawingManager.canDraw = false;
-    startBtn.style.display = 'block';
 
     const score = calculateAccuracy(bgCtx, drawingManager.ctx, bgCanvas.width, bgCanvas.height);
     

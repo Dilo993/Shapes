@@ -78,29 +78,6 @@ canvas {
     z-index: 2; 
 }
 
-#startOverlayBtn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 3;
-    padding: 15px 30px;
-    font-size: 20px;
-    background-color: #28a745;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
-}
-
-#startOverlayBtn:hover {
-    background-color: #218838;
-    transform: translate(-50%, -50%) scale(1.05);
-}
-
 #result {
     margin-top: 20px;
     font-size: 24px;
