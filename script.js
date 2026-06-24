@@ -115,6 +115,7 @@ function startTimer() {
     drawingManager.canDraw = true;
     resultDiv.innerHTML = `Pozostały czas: ${timeLeft}s`;
 
+    // Gdy gracz zaczyna rysować w trybie z pamięci, chowamy wzór
     if (!showTemplate) {
         bgCanvas.style.display = 'none';
     }
@@ -128,6 +129,7 @@ function startTimer() {
             drawingManager.canDraw = false;
             drawingManager.stop();
             
+            // Po końcu czasu zawsze pokazujemy wzór do porównania
             bgCanvas.style.display = 'block';
 
             resultDiv.innerHTML = "Koniec czasu! Sprawdzam...";
@@ -143,14 +145,19 @@ function clearCanvas() {
     gameStarted = false; 
     drawingManager.canDraw = true;
     
-    bgCanvas.style.display = 'block'; 
-    resultDiv.innerHTML = 'Zacznij rysować, aby uruchomić czas (6s)!';
+    bgCanvas.style.display = showTemplate ? 'block' : 'none'; 
+    
+    resultDiv.innerHTML = showTemplate 
+        ? 'Zacznij rysować po płótnie, aby uruchomić czas (6s)!' 
+        : 'Przyjrzyj się kształtowi (w trybie z pamięci zniknie on po pierwszym dotknięciu)!';
 }
 
 function setMode(mode) {
     showTemplate = mode;
     document.getElementById('btnWithTemplate').classList.toggle('active', mode);
     document.getElementById('btnWithoutTemplate').classList.toggle('active', !mode);
+    
+    bgCanvas.style.display = mode ? 'block' : 'none';
     clearCanvas();
 }
 
