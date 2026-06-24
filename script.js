@@ -115,7 +115,6 @@ function startTimer() {
     drawingManager.canDraw = true;
     resultDiv.innerHTML = `Pozostały czas: ${timeLeft}s`;
 
-    // Gdy gracz zaczyna rysować w trybie z pamięci, chowamy wzór
     if (!showTemplate) {
         bgCanvas.style.display = 'none';
     }
@@ -129,7 +128,6 @@ function startTimer() {
             drawingManager.canDraw = false;
             drawingManager.stop();
             
-            // Po końcu czasu zawsze pokazujemy wzór do porównania
             bgCanvas.style.display = 'block';
 
             resultDiv.innerHTML = "Koniec czasu! Sprawdzam...";
@@ -165,6 +163,9 @@ function changeCharacter() {
     bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
     let loadedCount = 0;
 
+    const unikalneFoldery = new Set(wybraneZnaki.map(pozycja => pozycja.fIdx));
+    const czyMiksFolderow = unikalneFoldery.size > 1;
+
     wybraneZnaki.forEach(pozycja => {
         const znak = FOLDERY[pozycja.fIdx].shapes[pozycja.sIdx];
         const img = new Image();
@@ -174,6 +175,20 @@ function changeCharacter() {
         img.onload = function() {
             bgCtx.save();
             
+            let szerokosc = 320;
+            let wysokosc = 320;
+            let marginesX = 40;
+            let marginesY = 40;
+
+            if (czyMiksFolderow && pozycja.fIdx === 0) {
+                szerokosc = 320 * 1.5;
+                wysokosc = 320 * 1.5;
+                
+
+                marginesX = (bgCanvas.width - szerokosc) / 2;
+                marginesY = (bgCanvas.height - wysokosc) / 2;
+            }
+
             const kat = znak.rotation || 0;
             if (kat !== 0) {
                 bgCtx.translate(bgCanvas.width / 2, bgCanvas.height / 2);
@@ -181,7 +196,7 @@ function changeCharacter() {
                 bgCtx.translate(-bgCanvas.width / 2, -bgCanvas.height / 2);
             }
 
-            bgCtx.drawImage(img, 40, 40, 320, 320);
+            bgCtx.drawImage(img, marginesX, marginesY, szerokosc, wysokosc);
             bgCtx.restore();
 
             loadedCount++;
