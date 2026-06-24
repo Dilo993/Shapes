@@ -43,8 +43,6 @@ window.addEventListener('DOMContentLoaded', () => {
             label.style.cursor = 'pointer';
             label.style.fontSize = '16px';
             label.style.display = 'block';
-
-            const infoObrót = znak.rotation ? ` (${znak.rotation}°)` : '';
             
             const isChecked = wybraneZnaki.some(z => z.fIdx === folderIdx && z.sIdx === shapeIdx);
 
