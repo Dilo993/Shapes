@@ -210,10 +210,15 @@ function changeCharacter() {
         iloscWFolderze[p.fIdx] = (iloscWFolderze[p.fIdx] || 0) + 1;
     });
 
-    const KĄTY = [
+    const POZYCJE_DLA_2 = [
+        { x: 65,  y: 110 },
+        { x: 155, y: 110 }
+    ];
+
+    const KĄTY_DLA_WIELE = [
         { x: 10,  y: 10 },
         { x: 134, y: 10 },
-        { x: 10,  y: 134 },
+        { x: 10,  y: 134 }, 
         { x: 134, y: 134 }
     ];
 
@@ -233,23 +238,33 @@ function changeCharacter() {
             let marginesX = 40;
             let marginesY = 40;
 
-            const czyWieleZtegoSamegoFolderu = iloscWFolderze[pozycja.fIdx] > 1;
+            const ileWIdentycznymFolderze = iloscWFolderze[pozycja.fIdx];
+            const czyWieleZtegoSamegoFolderu = ileWIdentycznymFolderze > 1;
 
             if (czyWieleZtegoSamegoFolderu) {
-                szerokosc = 320 * 0.8;
-                wysokosc = 320 * 0.8;
-                
                 if (licznikKątówDlaFolderu[pozycja.fIdx] === undefined) {
                     licznikKątówDlaFolderu[pozycja.fIdx] = 0;
                 }
-                const katIndex = licznikKątówDlaFolderu[pozycja.fIdx] % 4;
-                
-                marginesX = KĄTY[katIndex].x;
-                marginesY = KĄTY[katIndex].y;
+                const aktualnyIndeks = licznikKątówDlaFolderu[pozycja.fIdx];
+
+                if (ileWIdentycznymFolderze === 2) {
+                    szerokosc = 180; 
+                    wysokosc = 180;
+                    
+                    marginesX = POZYCJE_DLA_2[aktualnyIndeks % 2].x;
+                    marginesY = POZYCJE_DLA_2[aktualnyIndeks % 2].y;
+                } else {
+                    szerokosc = 320 * 0.8;
+                    wysokosc = 320 * 0.8;
+                    
+                    marginesX = KĄTY_DLA_WIELE[aktualnyIndeks % 4].x;
+                    marginesY = KĄTY_DLA_WIELE[aktualnyIndeks % 4].y;
+                }
                 
                 licznikKątówDlaFolderu[pozycja.fIdx]++;
             }
 
+            // --- KROK 2: NIEZALEŻNE POWIĘKSZENIE DLA MIKSU Z FOLDEREM 0 ---
             if (czyMiksFolderow && pozycja.fIdx === 0) {
                 const staraSzerokosc = szerokosc;
                 const staraWysokosc = wysokosc;
@@ -261,11 +276,13 @@ function changeCharacter() {
                     marginesX = (bgCanvas.width - szerokosc) / 2;
                     marginesY = (bgCanvas.height - wysokosc) / 2;
                 } else {
+                    // Powiększanie ze środka swojej wyznaczonej pozycji
                     marginesX -= (szerokosc - staraSzerokosc) / 2;
                     marginesY -= (wysokosc - staraWysokosc) / 2;
                 }
             }
 
+            // --- KROK 3: OBSŁUGA OBROTU ---
             const kat = znak.rotation || 0;
             if (kat !== 0) {
                 const srodekX = marginesX + szerokosc / 2;
@@ -276,6 +293,7 @@ function changeCharacter() {
                 bgCtx.translate(-srodekX, -srodekY);
             }
 
+            // --- KROK 4: RYSOWANIE ---
             bgCtx.drawImage(img, marginesX, marginesY, szerokosc, wysokosc);
             bgCtx.restore();
 
