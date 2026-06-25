@@ -17,7 +17,7 @@ let wybraneZnaki = [{ fIdx: 0, sIdx: 0 }];
 window.addEventListener('DOMContentLoaded', () => {
     drawCanvas = document.getElementById('drawCanvas');
     bgCanvas = document.getElementById('bgCanvas');
-    bgCtx = bgCanvas.getContext('2d');
+    bgCtx = bgCanvas.getContext('2d', { willReadFrequently: true });
     resultDiv = document.getElementById('result');
 
     modal = document.getElementById('shapeModal');
