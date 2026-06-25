@@ -18,10 +18,11 @@ export const FOLDERY = [
     {
         categoryName: "Alchemia-Podstawowa",
         shapes: [
-            { name: "Water", url: "Znaki/Trójkąt.png" , rotation: 180},
-            { name: "Earth", url: "Znaki/Air.png", rotation: 180 },
             { name: "Fire", url: "Znaki/Trójkąt.png" },
-            { name: "Air", url: "Znaki/Air.png" }
+            { name: "Air", url: "Znaki/Air.png" },
+            { name: "Water", url: "Znaki/Trójkąt.png" , rotation: 180},
+            { name: "Earth", url: "Znaki/Air.png", rotation: 180 }
+            
         ]
     }
 ];
