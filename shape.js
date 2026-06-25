@@ -26,7 +26,7 @@ export const FOLDERY = [
             { name: "Water", url: "Znaki/Trójkąt.png" , rotation: 180},
             { name: "Earth", url: "Znaki/Air.png", rotation: 180 }
         ]
-    }
+    },
     {
         categoryName: "Alchemia",
         shapes: [
