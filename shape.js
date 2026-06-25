@@ -33,7 +33,19 @@ export const FOLDERY = [
             { name: "Fertilizer", url: "Znaki/Fertilizer.png" },
             { name: "Acid", url: "Znaki/Acid.png" },
             { name: "Glass", url: "Znaki/Glass.png" },
-            { name: "Copper", url: "Znaki/Copper.png" }
+            { name: "Copper", url: "Znaki/Copper.png" },
+            { name: "Iron", url: "Znaki/Iron.png" },
+            { name: "Coal", url: "Znaki/Coal.png" } 
+        ]
+    },
+    {
+        categoryName: "Time",
+        shapes: [
+            { name: "Day", url: "Znaki/Day.png" },
+            { name: "Night", url: "Znaki/Night.png" },
+            { name: "Hour", url: "Znaki/Hour.png" },
+            { name: "Week", url: "Znaki/Week.png" },
+            { name: "Year", url: "Znaki/Year.png" }
         ]
     }
 ];
