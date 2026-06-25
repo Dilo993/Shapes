@@ -34,7 +34,7 @@ export const FOLDERY = [
             { name: "Acid", url: "Znaki/Acid.png" },
             { name: "Glass", url: "Znaki/Glass.png" },
             { name: "Copper", url: "Znaki/Copper.png" },
-            { name: "Iron", url: "Znaki/Iron.png" },
+            { name: "Iron", url: "Znaki/iron.png" },
             { name: "Coal", url: "Znaki/Coal.png" } 
         ]
     },
@@ -43,7 +43,7 @@ export const FOLDERY = [
         shapes: [
             { name: "Day", url: "Znaki/Day.png" },
             { name: "Night", url: "Znaki/Night.png" },
-            { name: "Hour", url: "Znaki/Hour.png" },
+            { name: "Hour", url: "Znaki/hour.png" },
             { name: "Week", url: "Znaki/Week.png" },
             { name: "Year", url: "Znaki/Year.png" }
         ]
