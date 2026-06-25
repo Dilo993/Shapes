@@ -213,3 +213,9 @@ canvas {
     background-color: #3b6e4c;
     border-color: #5c9e6f;
 }
+
+.time-span {
+    color: wheat;
+    padding: 6px 12px;
+    font-size: 14px;
+}
