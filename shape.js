@@ -5,13 +5,13 @@ export const FOLDERY = [
     {
         categoryName: "Podstawowe",
         shapes: [
-            { name: "Koło", url: "Znaki/Koło.png" },
-            { name: "Kwadrat", url: "Znaki/Kwadrat.png" },
-            { name: "Trójkąt", url: "Znaki/Trójkąt.png" },
+            { name: "Circle", url: "Znaki/Koło.png" },
+            { name: "Triangle", url: "Znaki/Trójkąt.png" },
+            { name: "Square", url: "Znaki/Kwadrat.png" },
             { name: "Pentagon", url: "Znaki/Pentagon.png" },
             { name: "Hexagon", url: "Znaki/Hexagon.png" },
-            { name: "Serce", url: "Znaki/Serce.png" },
-            { name: "Heksagram", url: "Znaki/Heksagram.png" },
+            { name: "Heart", url: "Znaki/Serce.png" },
+            { name: "Hexagram", url: "Znaki/Heksagram.png" },
             { name: "Pentagram", url: "Znaki/Pentagram.png" }
         ]
     },
@@ -22,7 +22,15 @@ export const FOLDERY = [
             { name: "Air", url: "Znaki/Air.png" },
             { name: "Water", url: "Znaki/Trójkąt.png" , rotation: 180},
             { name: "Earth", url: "Znaki/Air.png", rotation: 180 }
-            
+        ]
+    }
+    {
+        categoryName: "Alchemia",
+        shapes: [
+            { name: "Fertilizer", url: "Znaki/Fertilizer.png" },
+            { name: "Acid", url: "Znaki/Acid.png" },
+            { name: "Glass", url: "Znaki/Glass.png" },
+            { name: "Copper", url: "Znaki/Copper.png" }
         ]
     }
 ];
