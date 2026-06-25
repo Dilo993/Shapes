@@ -48,9 +48,9 @@ window.addEventListener('DOMContentLoaded', () => {
         header.addEventListener('click', () => {
             const isCollapsed = optionsContainer.classList.toggle('collapsed');
             if (isCollapsed) {
-                toggleIcon.textContent = '(Rozwiń)';
-            } else {
                 toggleIcon.textContent = '(Zwiń)';
+            } else {
+                toggleIcon.textContent = '(Rozwiń)';
             }
         });
 
