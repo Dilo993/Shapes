@@ -7,9 +7,9 @@ let modal, btnSelectShape, modalClose, modalCategoriesContainer, btnApplyShapes;
 let drawingManager;
 
 let showTemplate = true;
+let maxTime = 6;
 let timeLeft = 6;
 let timerInterval = null;
-
 let gameStarted = false;
 
 let wybraneZnaki = [{ fIdx: 0, sIdx: 0 }];
@@ -28,7 +28,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     drawingManager = new DrawingManager(drawCanvas);
     drawingManager.canDraw = true;
-
     FOLDERY.forEach((folder, folderIdx) => {
         const categoryCard = document.createElement('div');
         categoryCard.className = 'category-card';
@@ -48,9 +47,9 @@ window.addEventListener('DOMContentLoaded', () => {
         header.addEventListener('click', () => {
             const isCollapsed = optionsContainer.classList.toggle('collapsed');
             if (isCollapsed) {
-                toggleIcon.textContent = '(Zwiń)';
-            } else {
                 toggleIcon.textContent = '(Rozwiń)';
+            } else {
+                toggleIcon.textContent = '(Zwiń)';
             }
         });
 
@@ -76,7 +75,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         modalCategoriesContainer.appendChild(categoryCard);
     });
-
     btnApplyShapes.addEventListener('click', () => {
         const checkboxes = modalCategoriesContainer.querySelectorAll('input[type="checkbox"]');
         wybraneZnaki = [];
@@ -116,11 +114,26 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnClear').addEventListener('click', clearCanvas);
     document.getElementById('btnCheck').addEventListener('click', checkAccuracy);
     
+    document.getElementById('btnTime6').addEventListener('click', () => setTimeLimit(6, 'btnTime6'));
+    document.getElementById('btnTime12').addEventListener('click', () => setTimeLimit(12, 'btnTime12'));
+    document.getElementById('btnTime18').addEventListener('click', () => setTimeLimit(18, 'btnTime18'));
+    document.getElementById('btnTimeInf').addEventListener('click', () => setTimeLimit(Infinity, 'btnTimeInf'));
+
     drawCanvas.addEventListener('mousedown', handleFirstStroke);
     drawCanvas.addEventListener('touchstart', handleFirstStroke);
 
     changeCharacter();
 });
+
+function setTimeLimit(seconds, activeId) {
+    if (gameStarted) return;
+    maxTime = seconds;
+    
+    document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(activeId).classList.add('active');
+    
+    clearCanvas();
+}
 
 function handleFirstStroke() {
     if (!gameStarted) {
@@ -131,14 +144,19 @@ function handleFirstStroke() {
 
 function startTimer() {
     clearInterval(timerInterval);
-    timeLeft = 6;
+    timeLeft = maxTime;
     drawingManager.canDraw = true;
-    resultDiv.innerHTML = `Pozostały czas: ${timeLeft}s`;
 
     if (!showTemplate) {
         bgCanvas.style.display = 'none';
     }
 
+    if (maxTime === Infinity) {
+        resultDiv.innerHTML = "Czas: Bez limitu. Kliknij 'Sprawdź', kiedy skończysz!";
+        return; 
+    }
+
+    resultDiv.innerHTML = `Pozostały czas: ${timeLeft}s`;
     timerInterval = setInterval(() => {
         timeLeft--;
         if (timeLeft > 0) {
@@ -149,7 +167,6 @@ function startTimer() {
             drawingManager.stop();
             
             bgCanvas.style.display = 'block';
-
             resultDiv.innerHTML = "Koniec czasu! Sprawdzam...";
             setTimeout(checkAccuracy, 500);
         }
@@ -162,19 +179,21 @@ function clearCanvas() {
     
     gameStarted = false; 
     drawingManager.canDraw = true;
-    
     bgCanvas.style.display = showTemplate ? 'block' : 'none'; 
     
-    resultDiv.innerHTML = showTemplate 
-        ? 'Zacznij rysować po płótnie, aby uruchomić czas (6s)!' 
-        : 'Przyjrzyj się kształtowi (w trybie z pamięci zniknie on po pierwszym dotknięciu)!';
+    if (maxTime === Infinity) {
+        resultDiv.innerHTML = 'Zacznij rysować. Brak limitu czasu!';
+    } else {
+        resultDiv.innerHTML = showTemplate 
+            ? `Zacznij rysować po płótnie, aby uruchomić czas (${maxTime}s)!` 
+            : `Przyjrzyj się kształtowi (w trybie z pamięci zniknie on po pierwszym dotknięciu, masz ${maxTime}s)!`;
+    }
 }
 
 function setMode(mode) {
     showTemplate = mode;
     document.getElementById('btnWithTemplate').classList.toggle('active', mode);
     document.getElementById('btnWithoutTemplate').classList.toggle('active', !mode);
-    
     bgCanvas.style.display = mode ? 'block' : 'none';
     clearCanvas();
 }
@@ -192,7 +211,7 @@ function changeCharacter() {
     });
 
     const KĄTY = [
-        { x: 10,  y: 10 }, 
+        { x: 10,  y: 10 },
         { x: 134, y: 10 },
         { x: 10,  y: 134 },
         { x: 134, y: 134 }
@@ -271,6 +290,8 @@ function changeCharacter() {
 function checkAccuracy() {
     clearInterval(timerInterval);
     drawingManager.canDraw = false;
+
+    bgCanvas.style.display = 'block';
 
     const score = calculateAccuracy(bgCtx, drawingManager.ctx, bgCanvas.width, bgCanvas.height);
     

@@ -197,3 +197,19 @@ canvas {
 .category-options.collapsed {
     display: none;
 }
+
+.time-btn {
+    background-color: #444;
+    color: wheat;
+    border: 1px solid #666;
+    padding: 6px 12px;
+    margin: 0 3px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.time-btn.active {
+    background-color: #3b6e4c;
+    border-color: #5c9e6f;
+}
