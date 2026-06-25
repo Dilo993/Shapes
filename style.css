@@ -181,3 +181,19 @@ canvas {
     flex-direction: column;
     gap: 8px;
 }
+
+.category-card h3 {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+.category-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.category-options.collapsed {
+    display: none;
+}

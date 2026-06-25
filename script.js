@@ -32,12 +32,27 @@ window.addEventListener('DOMContentLoaded', () => {
     FOLDERY.forEach((folder, folderIdx) => {
         const categoryCard = document.createElement('div');
         categoryCard.className = 'category-card';
+        
         categoryCard.innerHTML = `
-            <h3>📁 ${folder.categoryName}</h3>
+            <h3>
+                <span>${folder.categoryName}</span>
+                <span class="toggle-icon" style="transition: transform 0.2s; font-size: 12px;">(Rozwiń)</span>
+            </h3>
             <div class="category-options"></div>
         `;
         
         const optionsContainer = categoryCard.querySelector('.category-options');
+        const header = categoryCard.querySelector('h3');
+        const toggleIcon = categoryCard.querySelector('.toggle-icon');
+
+        header.addEventListener('click', () => {
+            const isCollapsed = optionsContainer.classList.toggle('collapsed');
+            if (isCollapsed) {
+                toggleIcon.textContent = '(Rozwiń)';
+            } else {
+                toggleIcon.textContent = '(Zwiń)';
+            }
+        });
 
         folder.shapes.forEach((znak, shapeIdx) => {
             const label = document.createElement('label');
@@ -51,6 +66,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 <input type="checkbox" value="${folderIdx}-${shapeIdx}" ${isChecked ? 'checked' : ''} style="margin-right: 10px; transform: scale(1.1);">
                 ${znak.name}
             `;
+            
+            label.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
             optionsContainer.appendChild(label);
         });
 
