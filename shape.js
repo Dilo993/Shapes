@@ -7,7 +7,10 @@ export const FOLDERY = [
         shapes: [
             { name: "Circle", url: "Znaki/Koło.png" },
             { name: "Triangle", url: "Znaki/Trójkąt.png" },
+            { name: "Triangle_Left", url: "Znaki/Tru_lewy.png" },
+            { name: "Triangle_Right", url: "Znaki/Tru_prawy.png" },
             { name: "Square", url: "Znaki/Kwadrat.png" },
+            { name: "Diamond", url: "Znaki/Diamond.png" },
             { name: "Pentagon", url: "Znaki/Pentagon.png" },
             { name: "Hexagon", url: "Znaki/Hexagon.png" },
             { name: "Heart", url: "Znaki/Serce.png" },
